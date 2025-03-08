@@ -4,6 +4,7 @@ using Journal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Journal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250308093612_JournalEntryArchiveTable")]
+    partial class JournalEntryArchiveTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,10 +78,7 @@ namespace Journal.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsArchived")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("JournalEntryArchiveId")
+                    b.Property<int>("JournalEntryArchiveId")
                         .HasColumnType("int");
 
                     b.Property<int?>("TagId")
@@ -103,7 +103,7 @@ namespace Journal.Migrations
                             Id = 1,
                             Content = "This is the first entry",
                             Created = new DateTime(2025, 2, 14, 10, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsArchived = false,
+                            JournalEntryArchiveId = 0,
                             Title = "First Entry"
                         },
                         new
@@ -111,7 +111,7 @@ namespace Journal.Migrations
                             Id = 2,
                             Content = "This is the second entry",
                             Created = new DateTime(2025, 2, 15, 12, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsArchived = false,
+                            JournalEntryArchiveId = 0,
                             Title = "Second Entry"
                         },
                         new
@@ -119,7 +119,7 @@ namespace Journal.Migrations
                             Id = 3,
                             Content = "This is the third entry",
                             Created = new DateTime(2025, 2, 16, 11, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsArchived = false,
+                            JournalEntryArchiveId = 0,
                             Title = "Third Entry"
                         });
                 });

@@ -7,8 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Journal.Controllers;
 
-public class JournalEntriesController(JournalEntryRepository repository, CategoryRepository categoryRepository, TagRepository tagRepository) : Controller
+public class JournalEntriesController(JournalEntryRepository repository, CategoryRepository categoryRepository, TagRepository tagRepository, JournalEntryArchiveRepository journalEntryArchiveRepository) : Controller
 {
+    
     public IActionResult Index()
     {
         var objJournalEntryList = repository.GetAllJournalEntriesWithCategoriesAndTags();
@@ -141,12 +142,48 @@ public class JournalEntriesController(JournalEntryRepository repository, Categor
         return View(journalEntry);
     }
 
+    [HttpGet]
+    public IActionResult Archive(int? id)
+    {
+        if (id is null or 0)
+        {
+            return NotFound();
+        }
+
+        var journalEntry = repository.GetJournalEntryById(id.Value);
+        if (journalEntry == null)
+        {
+            return NotFound();
+        }
+
+        return View(journalEntry);
+    }
+
+    [HttpPost]
+    public IActionResult Archive(JournalEntry obj)
+    {
+        journalEntryArchiveRepository.CreateArchive(new JournalEntryArchive
+        {
+            JournalEntryId = obj.Id,
+        });
+
+        var journalEntry = repository.GetJournalEntryById(obj.Id);
+        if (journalEntry == null)
+        {
+            return NotFound();
+        }
+        
+        journalEntry.IsArchived = true;
+        repository.UpdateJournalEntry(journalEntry);
+        
+        return RedirectToAction("Index");
+    }
+
     [HttpPost]
     public IActionResult Delete(JournalEntry obj)
     {
         repository.DeleteJournalEntry(obj);
         
-
         return RedirectToAction("Index");
     }
 }

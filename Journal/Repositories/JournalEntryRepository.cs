@@ -13,12 +13,13 @@ namespace Journal.Repositories
         }
         public List<JournalEntry> GetAllJournalEntriesWithCategoriesAndTags()
         {
-            return _db.JournalEntries.Include(entity => entity.Category).Include(entity => entity.Tag).ToList();
+            return _db.JournalEntries
+                .Include(entity => entity.Category)
+                .Include(entity => entity.Tag)
+                .Where(entity => entity.IsArchived == false)
+                .ToList();
         }
-        public List<JournalEntry> GetAllJournalEntries()
-        {
-            return _db.JournalEntries.ToList();
-        }
+
         public void AddJournalEntry(JournalEntry obj)
         {
             _db.JournalEntries.Add(obj);
@@ -26,7 +27,10 @@ namespace Journal.Repositories
         }
         public JournalEntry? GetJournalEntryById(int id)
         {
-            return _db.JournalEntries.Find(id);
+            return _db.JournalEntries
+                .Include(entity => entity.Category)
+                .Include(entity => entity.Tag)
+                .FirstOrDefault(entity => entity.Id == id);
         }
         public void UpdateJournalEntry(JournalEntry obj)
         {

@@ -1,5 +1,4 @@
-﻿using Journal.Data;
-using Journal.Models;
+﻿using Journal.Models;
 using Journal.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,7 +30,6 @@ public class CategoriesController(CategoryRepository repository) : Controller
         {
             return View(obj);
         }
-        //obj.Created = DateTime.Now;
         repository.AddCategory(obj);
 
         return RedirectToAction("Index");
@@ -45,13 +43,13 @@ public class CategoriesController(CategoryRepository repository) : Controller
             return NotFound();
         }
 
-        var CategoriesEntry =repository.GetCategoryById(id.Value);
-        if (CategoriesEntry == null)
+        var categoriesEntry =repository.GetCategoryById(id.Value);
+        if (categoriesEntry == null)
         {
             return NotFound();
         }
 
-        return View(CategoriesEntry);
+        return View(categoriesEntry);
     }
 
     [HttpPost]
@@ -66,7 +64,6 @@ public class CategoriesController(CategoryRepository repository) : Controller
         {
             return View(obj);
         }
-        //obj.Created = DateTime.Now;
         repository.UpdateCategory(obj);
         
         return RedirectToAction("Index");
@@ -80,13 +77,13 @@ public class CategoriesController(CategoryRepository repository) : Controller
             return NotFound();
         }
 
-        var CategoryEntry = repository.GetCategoryById(id.Value);
-        if (CategoryEntry == null)
+        var categoryEntry = repository.GetCategoryById(id.Value);
+        if (categoryEntry == null)
         {
             return NotFound();
         }
 
-        return View(CategoryEntry);
+        return View(categoryEntry);
     }
 
     [HttpPost]

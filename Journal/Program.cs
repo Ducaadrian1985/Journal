@@ -9,6 +9,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddScoped<JournalEntryRepository>();
 builder.Services.AddScoped<TagRepository>();
+builder.Services.AddScoped<JournalEntryArchiveRepository>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 

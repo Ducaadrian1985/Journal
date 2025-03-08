@@ -9,6 +9,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Category> Categories { get; set; }
 
     public DbSet<Tag> Tags { get; set; }
+    public DbSet<JournalEntryArchive> JournalEntryArchives { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -36,9 +37,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             new Category { Id = 2, Name = "Work" },
             new Category { Id = 3, Name = "Travel" }
         );
-        modelBuilder.Entity<JournalEntry>().HasOne(JournalEntry => JournalEntry.Category)
-            .WithMany(Category => Category!.JournalEntries)
-            .HasForeignKey(JournalEntry => JournalEntry.CategoryId)
+        modelBuilder.Entity<JournalEntry>().HasOne(journalEntry => journalEntry.Category)
+            .WithMany(category => category!.JournalEntries)
+            .HasForeignKey(journalEntry => journalEntry.CategoryId)
             .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<Tag>().HasData(
@@ -46,11 +47,15 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             new Tag { Id = 2, Name = "Urgent" },
             new Tag { Id = 3, Name = "Optional" }
         );
-        modelBuilder.Entity<JournalEntry>().HasOne(JournalEntry => JournalEntry.Tag)
-            .WithMany(Tag => Tag!.JournalEntries)
-            .HasForeignKey(JournalEntry => JournalEntry.TagId)
+        modelBuilder.Entity<JournalEntry>()
+            .HasOne(journalEntry => journalEntry.Tag)
+            .WithMany(tag => tag!.JournalEntries)
+            .HasForeignKey(journalEntry => journalEntry.TagId)
             .OnDelete(DeleteBehavior.SetNull);
 
-
+        modelBuilder.Entity<JournalEntryArchive>()
+            .HasOne(journalEntryArchive => journalEntryArchive.JournalEntry)
+            .WithOne(journalEntry => journalEntry.JournalEntryArchive)
+            .HasForeignKey<JournalEntryArchive>(journalEntryArchive => journalEntryArchive.JournalEntryId);
     }
 }

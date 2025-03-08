@@ -4,7 +4,6 @@ namespace Journal.Models;
 
 public class JournalEntry
 {
-    //[Key]
     public int Id { get; set; }
 
     [Required(ErrorMessage = "Title is required!")]
@@ -22,4 +21,10 @@ public class JournalEntry
 
     public int? TagId { get; set; }
     public Tag? Tag { get; set; }
+    
+    public int? JournalEntryArchiveId { get; set; }
+    
+    public JournalEntryArchive? JournalEntryArchive { get; set; }
+    
+    public bool IsArchived { get; set; }
 }
